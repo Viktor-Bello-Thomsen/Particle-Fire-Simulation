@@ -1,4 +1,5 @@
 #include "Screen.h"
+#include <string.h>
 
 namespace vbt {
 
@@ -44,13 +45,13 @@ bool Screen::init() {
 
 	//maybe catch error for unsuccesful memory allocation
 	m_buffer = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
+	memset(m_buffer, 0, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
 	
-	//same as memset... slower. But we can change individual values
-	// 0x(Red)(Green)(Blue)(Alpha) Alpha does not seem to work though
-	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-		m_buffer[i] = 0xFFFF0000;
-	}
+	return true;
+}
 
+
+void Screen::update() {
 	SDL_UpdateTexture(m_texture, NULL, m_buffer, SCREEN_WIDTH * sizeof(Uint32));
 	//Copying pixels to our texture from buffer
 	SDL_RenderClear(m_renderer);
@@ -58,9 +59,21 @@ bool Screen::init() {
 	//Passing our texture to the renderer
 	SDL_RenderPresent(m_renderer);
 	//Presenting the renderer to window/screen
-
-	return true;
 }
+
+void Screen::setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue) {
+	Uint32 color = 0;
+	color += red;
+	color <<= 8;
+	color += green;
+	color <<= 8;
+	color += blue;
+	color <<= 8;
+	color += 0xFF;
+	m_buffer[(y * SCREEN_WIDTH) + x] = color;
+
+}
+
 bool Screen::processEvents() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
