@@ -15,6 +15,8 @@ int main(int argc, char* argv[]) {
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
 		SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
+
+	// dealing with error in building window
 	if (window == NULL) {
 		cout << SDL_GetError() << endl;
 		SDL_Quit();
@@ -26,6 +28,7 @@ int main(int argc, char* argv[]) {
 	SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, 
 		SDL_TEXTUREACCESS_STATIC, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//handling if renderer and texture are not correctly build
 	if (renderer == NULL) {
 		cout << "Could not create renderer" << endl;
 		SDL_DestroyWindow(window);
@@ -43,15 +46,23 @@ int main(int argc, char* argv[]) {
 	Uint32 *buffer = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
 	//maybe catch error for unsuccesful memory allocation
 
-	memset(buffer, 0xFF, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
+	memset(buffer, 0, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(Uint32));
 	// 0xFF is just another way of writing 255, but in hexadecimal
 
+	buffer[30000] = 0xFFFFFFFF;
+
+	//same as memset... slower. But we can change individual values
+	// 0x(Red)(Green)(Blue)(Alpha) Alpha does not seem to work though
+	for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
+		buffer[i] = 0x00808000;
+	}
+	
 
 	SDL_UpdateTexture(texture, NULL, buffer, SCREEN_WIDTH * sizeof(Uint32));
-	//Copying pixels to our buffer
+	//Copying pixels to our texture from buffer
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
-	//Passing our buffer to the renderer
+	//Passing our texture to the renderer
 	SDL_RenderPresent(renderer);
 	//Presenting the renderer to window/screen
 
@@ -75,19 +86,3 @@ int main(int argc, char* argv[]) {
 	SDL_Quit();
 	return 0;
 }
-
-
-
-
-/*
-	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Window* window = SDL_CreateWindow("title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_SHOWN);
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-
-	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
-
-	SDL_Delay(3000);
-
-	*/
