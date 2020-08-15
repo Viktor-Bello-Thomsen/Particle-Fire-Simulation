@@ -12,4 +12,12 @@ Swarm::~Swarm() {
 Particle* const Swarm::getParticles() {
 	return m_pParticles;
 }
+
+void Swarm::update() {
+	for (int i = 0; i < NPARTICLES; i++) {
+		m_pParticles[i].update();
+		
+	}
+}
+
 }

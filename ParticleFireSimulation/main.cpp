@@ -26,7 +26,8 @@ int main(int argc, char* argv[]) {
 		//update particles
 		//draw particles
 		//check for message/events
-
+		screen.clear();
+		swarm.update();
 		int elapsed = SDL_GetTicks();
 		unsigned char red = (unsigned char)((1 + sin(elapsed * 0.0001)) * 128);
 		unsigned char green = (unsigned char)((1 + sin(elapsed * 0.0002)) * 128);
@@ -45,7 +46,6 @@ int main(int argc, char* argv[]) {
 		
 
 		screen.update();
-		
 		if (screen.processEvents() == false) {
 			break;
 		}
