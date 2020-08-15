@@ -7,8 +7,8 @@ namespace vbt {
 class Particle
 {
 private:
-	double xspeed;
-	double yspeed;
+	double m_speed;
+	double m_direction;
 
 public:
 	// for the sake of speed these member variables are made public
@@ -17,7 +17,7 @@ public:
 public:
 	Particle();
 	~Particle();
-	void update();
+	void update(int interval);
 
 };
 
