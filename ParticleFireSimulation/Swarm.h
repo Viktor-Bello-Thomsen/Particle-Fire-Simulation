@@ -9,7 +9,7 @@ private:
 	int lastTime;
 
 public:
-	const static int NPARTICLES = 50000;
+	const static int NPARTICLES = 6000;
 
 
 public:
