@@ -20,19 +20,17 @@ int main(int argc, char* argv[]) {
 	
 	Swarm swarm;
 	
-	int max = 0;
 
 	while (true) {
 		//update particles
 		//draw particles
 		//check for message/events
-		screen.clear();
+		//screen.clear();
 		int elapsed = SDL_GetTicks();
 		swarm.update(elapsed);
 		unsigned char red = (unsigned char)((1 + sin(elapsed * 0.0001)) * 128);
 		unsigned char green = (unsigned char)((1 + sin(elapsed * 0.0002)) * 128);
 		unsigned char blue = (unsigned char)((1 + sin(elapsed * 0.0003)) * 128);
-		if (green > max) max = green;
 
 		Particle* pParticles = swarm.getParticles();
 		for (int i = 0; i < Swarm::NPARTICLES; i++) {
@@ -44,13 +42,12 @@ int main(int argc, char* argv[]) {
 
 		
 		
-
+		screen.boxBlur();
 		screen.update();
 		if (screen.processEvents() == false) {
 			break;
 		}
 	}
-	cout <<"Max: "  << max << endl;
 	screen.close();
 	return 0;
 }

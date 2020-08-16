@@ -13,8 +13,6 @@ namespace vbt {
 
 	Particle::~Particle() {
 
-
-
 	}
 
 	void Particle::update(int interval) {
